@@ -328,62 +328,140 @@ p { color: var(--text-muted); line-height: 1.7; }
 .lightsaber.visible {
   transform: translateY(0);
 }
+/* Hilt container */
 .lightsaber-hilt {
-  width: 50px;
-  height: 36px;
   flex-shrink: 0;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  height: 32px;
+}
+/* Pommel - rounded end cap */
+.hilt-pommel {
+  width: 14px;
+  height: 28px;
+  border-radius: 6px 0 0 6px;
+  background: linear-gradient(180deg, #b0b0b8 0%, #6a6a78 30%, #8a8a96 50%, #5a5a68 70%, #7a7a88 100%);
+  box-shadow:
+    inset 1px 0 2px rgba(255,255,255,0.2),
+    inset -1px 0 2px rgba(0,0,0,0.3),
+    -2px 0 4px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+.hilt-pommel::after {
+  content: '';
+  position: absolute;
+  top: 6px; bottom: 6px; left: 3px;
+  width: 3px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  border-radius: 2px;
+}
+/* Grip - textured main body */
+.hilt-grip {
+  width: 52px;
+  height: 32px;
   background:
     repeating-linear-gradient(
       90deg,
-      #8a8a9a 0px,
-      #6b6b7b 2px,
-      #9a9aaa 3px,
-      #7a7a8a 5px
+      #7a7a88 0px, #5c5c6a 1px, #8a8a96 2px, #6a6a78 3.5px, #9a9aa6 4.5px, #7a7a88 6px
     );
   box-shadow:
-    inset 0 0 4px rgba(255,255,255,0.15),
+    inset 0 2px 3px rgba(255,255,255,0.12),
+    inset 0 -2px 3px rgba(0,0,0,0.3),
     0 2px 8px rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.3);
   position: relative;
+}
+/* Grip rubber bands */
+.hilt-grip::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 8px;
+  width: 12px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 2px,
+    rgba(40,40,50,0.6) 2px, rgba(40,40,50,0.6) 4px
+  );
+  border-radius: 1px;
+}
+.hilt-grip::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; right: 8px;
+  width: 12px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 2px,
+    rgba(40,40,50,0.6) 2px, rgba(40,40,50,0.6) 4px
+  );
+  border-radius: 1px;
+}
+/* Guard - the wider section before emitter */
+.hilt-guard {
+  width: 10px;
+  height: 38px;
+  background: linear-gradient(180deg, #c0c0cc 0%, #7a7a88 25%, #9a9aa8 50%, #6a6a78 75%, #b0b0bc 100%);
+  box-shadow:
+    inset 1px 0 2px rgba(255,255,255,0.2),
+    inset -1px 0 2px rgba(0,0,0,0.2),
+    0 0 6px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+.hilt-guard::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px; height: 4px;
+  background: #66bb6a;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #66bb6a, 0 0 8px rgba(102,187,106,0.6);
+}
+/* Emitter - where the blade comes out */
+.hilt-emitter {
+  width: 16px;
+  height: 24px;
+  background: linear-gradient(180deg, #d0d0d8 0%, #8a8a96 40%, #a0a0ac 60%, #7a7a88 100%);
+  border-radius: 0 3px 3px 0;
+  box-shadow:
+    inset 1px 0 2px rgba(255,255,255,0.25),
+    2px 0 6px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
+  position: relative;
 }
-.lightsaber-hilt::before {
+.hilt-emitter::before {
   content: '';
   position: absolute;
-  right: -4px;
-  top: -2px;
-  bottom: -2px;
-  width: 6px;
-  background: linear-gradient(90deg, #aaa, #666);
+  top: 4px; bottom: 4px; right: 1px;
+  width: 4px;
+  background: linear-gradient(180deg, rgba(102,187,106,0.2), rgba(102,187,106,0.5), rgba(102,187,106,0.2));
   border-radius: 0 2px 2px 0;
-  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 0 6px rgba(102,187,106,0.3);
 }
-.lightsaber-hilt::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 4px;
-  bottom: 4px;
-  width: 8px;
-  background: linear-gradient(180deg, rgba(102,187,106,0.5), rgba(76,175,80,0.4));
-  border-radius: 2px;
-  box-shadow: 0 0 6px rgba(102,187,106,0.4);
-  z-index: -1;
-}
+/* Percentage - floating at blade tip */
 .lightsaber-pct {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  color: #66bb6a;
-  text-shadow: 0 0 8px #66bb6a, 0 0 16px rgba(102,187,106,0.5);
+  color: #fff;
+  text-shadow: 0 0 8px #66bb6a, 0 0 16px rgba(102,187,106,0.6);
   letter-spacing: 0.5px;
-  position: relative;
-  z-index: 1;
+  position: absolute;
+  right: -8px;
+  top: -22px;
+  transform: translateX(50%);
+  white-space: nowrap;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.lightsaber-blade[style*="width"] .lightsaber-pct {
+  opacity: 1;
 }
 .lightsaber-blade-wrap {
   flex: 1;
@@ -1489,10 +1567,15 @@ section {
 <!-- ===== LIGHTSABER PROGRESS ===== -->
 <div class="lightsaber" id="lightsaber">
   <div class="lightsaber-hilt">
-    <span class="lightsaber-pct" id="lightsaber-pct">0%</span>
+    <div class="hilt-pommel"></div>
+    <div class="hilt-grip"></div>
+    <div class="hilt-guard"></div>
+    <div class="hilt-emitter"></div>
   </div>
   <div class="lightsaber-blade-wrap">
-    <div class="lightsaber-blade" id="lightsaber-blade"></div>
+    <div class="lightsaber-blade" id="lightsaber-blade">
+      <span class="lightsaber-pct" id="lightsaber-pct">0%</span>
+    </div>
     <canvas class="lightsaber-sparks" id="lightsaber-sparks"></canvas>
   </div>
 </div>
@@ -2478,6 +2561,7 @@ window.addEventListener('scroll', () => {
 
   blade.style.width = pct + '%';
   pctLabel.textContent = pct + '%';
+  pctLabel.style.opacity = pct > 3 ? '1' : '0';
 
   // ensure animation loop is running
   if (!animLoopRunning) startAnimLoop();
