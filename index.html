@@ -227,6 +227,7 @@ p { color: var(--text-muted); line-height: 1.7; }
   margin: 8px 0;
   white-space: pre-wrap;
   word-break: break-all;
+  text-align: left;
 }
 .code-block code {
   user-select: all;
@@ -290,7 +291,7 @@ p { color: var(--text-muted); line-height: 1.7; }
   flex-shrink: 0;
   margin-top: 2px;
 }
-.sub-step-content { flex: 1; min-width: 0; }
+.sub-step-content { flex: 1; min-width: 0; text-align: left; }
 .sub-step-content h4 {
   font-size: 0.95rem;
   color: var(--text);
@@ -1775,8 +1776,8 @@ section {
 
       <!-- What you'll see -->
       <div style="margin-top:32px;">
-        <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">Here's what a successful install looks like:</p>
-        <div class="terminal" data-anim="clip-reveal-up" data-delay="200" data-terminal>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">Here's what a successful install looks like:</p>
+        <div class="terminal" data-anim="fade-up" data-delay="200" data-terminal>
           <div class="terminal-bar">
             <span class="terminal-dot red"></span>
             <span class="terminal-dot yellow"></span>
