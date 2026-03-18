@@ -530,6 +530,91 @@ p { color: var(--text-muted); line-height: 1.7; }
   .lightsaber.visible {
     transform: translateY(0) scale(0.65);
   }
+  .lightsaber.completed {
+    transform: scale(0.65);
+  }
+}
+
+/* Lightsaber → Certificate transition */
+.lightsaber.completed {
+  bottom: 16px;
+  left: 50%;
+  right: auto;
+  width: 420px;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(15,15,15,0.95), rgba(26,26,46,0.95));
+  border: 1px solid rgba(102,187,106,0.3);
+  border-radius: 12px;
+  padding: 20px 28px 16px;
+  box-shadow:
+    0 0 20px rgba(102,187,106,0.15),
+    0 0 60px rgba(102,187,106,0.08),
+    0 8px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
+  animation: certAppear 0.8s var(--ease-out-back) forwards;
+}
+@keyframes certAppear {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.6); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+.lightsaber.completed .lightsaber-hilt,
+.lightsaber.completed .lightsaber-blade-wrap {
+  display: none;
+}
+.lightsaber-cert {
+  display: none;
+  text-align: center;
+  width: 100%;
+}
+.lightsaber.completed .lightsaber-cert {
+  display: block;
+  animation: certFadeIn 0.6s 0.3s ease both;
+}
+@keyframes certFadeIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.cert-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.cert-title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: #66bb6a;
+  text-shadow: 0 0 12px rgba(102,187,106,0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.cert-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.cert-name span {
+  background: linear-gradient(135deg, #66bb6a, #a5d6a7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cert-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  font-family: var(--font-mono);
+}
+@media (max-width: 768px) {
+  .lightsaber.completed {
+    width: 300px;
+    padding: 16px 20px 12px;
+    bottom: 10px;
+  }
 }
 
 /* ===== SECTION SPACING ===== */
@@ -1485,7 +1570,7 @@ section {
 /* ===== FOOTER ===== */
 .footer {
   text-align: center;
-  padding: 80px 0 40px;
+  padding: 80px 0 180px;
   position: relative;
 }
 .footer::before {
@@ -1577,6 +1662,12 @@ section {
       <span class="lightsaber-pct" id="lightsaber-pct">0%</span>
     </div>
     <canvas class="lightsaber-sparks" id="lightsaber-sparks"></canvas>
+  </div>
+  <div class="lightsaber-cert">
+    <div class="cert-icon">⚔️</div>
+    <div class="cert-title">Certificate of Completion</div>
+    <div class="cert-name">You are now a <span>Jedi Agent</span></div>
+    <div class="cert-sub">May the force be with your codebase</div>
   </div>
 </div>
 
@@ -2557,6 +2648,15 @@ window.addEventListener('scroll', () => {
     lightsaber.classList.add('visible');
   } else {
     lightsaber.classList.remove('visible');
+  }
+
+  // Certificate at 100%
+  if (pct >= 100 && !lightsaber.classList.contains('completed')) {
+    lightsaber.classList.add('completed');
+    return;
+  }
+  if (pct < 100 && lightsaber.classList.contains('completed')) {
+    lightsaber.classList.remove('completed');
   }
 
   blade.style.width = pct + '%';
