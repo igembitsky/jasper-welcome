@@ -308,67 +308,27 @@ p { color: var(--text-muted); line-height: 1.7; }
 /* ===== LIGHTSABER PROGRESS ===== */
 .lightsaber {
   position: fixed;
-  left: 22px;
-  top: 50%;
-  transform: translateY(-50%) translateX(-70px);
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
   z-index: 200;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  transform: translateY(80px);
   transition: transform 0.6s var(--ease-out-back);
   pointer-events: none;
 }
 .lightsaber.visible {
-  transform: translateY(-50%) translateX(0);
-}
-.lightsaber-pct {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  background: var(--gradient-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 4px;
-  opacity: 0.9;
-  letter-spacing: 0.5px;
-}
-.lightsaber-blade-wrap {
-  width: 6px;
-  height: 180px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-.lightsaber-blade {
-  width: 100%;
-  height: 0%;
-  border-radius: 3px 3px 0 0;
-  background: linear-gradient(180deg, rgba(0,200,255,0.6) 0%, rgba(124,58,237,0.9) 60%, rgba(255,255,255,1) 100%);
-  box-shadow:
-    0 0 8px rgba(0,200,255,0.6),
-    0 0 20px rgba(124,58,237,0.3),
-    0 0 40px rgba(0,200,255,0.15);
-  transition: height 0.15s ease-out;
-  position: relative;
-}
-.lightsaber-blade::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(0,200,255,0.2) 0%, rgba(124,58,237,0.15) 100%);
-  filter: blur(4px);
-  z-index: -1;
+  transform: translateY(0);
 }
 .lightsaber-hilt {
-  width: 14px;
-  height: 52px;
-  border-radius: 2px 2px 4px 4px;
+  width: 50px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 4px;
   background:
     repeating-linear-gradient(
-      180deg,
+      90deg,
       #8a8a9a 0px,
       #6b6b7b 2px,
       #9a9aaa 3px,
@@ -378,43 +338,113 @@ p { color: var(--text-muted); line-height: 1.7; }
     inset 0 0 4px rgba(255,255,255,0.15),
     0 2px 8px rgba(0,0,0,0.5);
   position: relative;
-  margin: 0 auto;
   border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 .lightsaber-hilt::before {
   content: '';
   position: absolute;
-  top: -3px;
-  left: -2px;
-  right: -2px;
-  height: 6px;
-  background: linear-gradient(180deg, #aaa, #666);
-  border-radius: 2px 2px 0 0;
+  right: -4px;
+  top: -2px;
+  bottom: -2px;
+  width: 6px;
+  background: linear-gradient(90deg, #aaa, #666);
+  border-radius: 0 2px 2px 0;
   border: 1px solid rgba(255,255,255,0.15);
 }
 .lightsaber-hilt::after {
   content: '';
   position: absolute;
-  top: 16px;
-  left: 1px;
-  right: 1px;
-  height: 8px;
-  background: linear-gradient(180deg, rgba(124,58,237,0.5), rgba(0,200,255,0.4));
+  left: 50%;
+  transform: translateX(-50%);
+  top: 4px;
+  bottom: 4px;
+  width: 8px;
+  background: linear-gradient(180deg, rgba(102,187,106,0.5), rgba(76,175,80,0.4));
   border-radius: 2px;
-  box-shadow: 0 0 6px rgba(124,58,237,0.4);
+  box-shadow: 0 0 6px rgba(102,187,106,0.4);
+  z-index: -1;
+}
+.lightsaber-pct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #66bb6a;
+  text-shadow: 0 0 8px #66bb6a, 0 0 16px rgba(102,187,106,0.5);
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+.lightsaber-blade-wrap {
+  flex: 1;
+  position: relative;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  margin-left: 2px;
+}
+.lightsaber-blade {
+  width: 0%;
+  height: 8px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(90deg, #fff 0%, #c8e6c9 10%, #66bb6a 40%, #2e7d32 100%);
+  box-shadow:
+    0 0 10px #66bb6a,
+    0 0 20px rgba(102,187,106,0.7),
+    0 0 40px rgba(102,187,106,0.4),
+    0 0 80px rgba(102,187,106,0.2);
+  transition: width 0.15s ease-out;
+  position: relative;
+  z-index: 1;
+}
+.lightsaber-blade::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: rgba(102,187,106,0.15);
+  filter: blur(8px);
+  z-index: -1;
+}
+.lightsaber-blade::before {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: -8px;
+  width: 24px;
+  height: 24px;
+  background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(102,187,106,0.3) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: tipPulse 2s ease-in-out infinite;
+}
+@keyframes tipPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.lightsaber-sparks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
 }
 
 @media (max-width: 768px) {
   .lightsaber {
+    bottom: 10px;
     left: 10px;
-    top: auto;
-    bottom: 20px;
-    transform: translateY(0) translateX(-60px) scale(0.75);
+    right: 10px;
+    transform: translateY(80px) scale(0.65);
+    transform-origin: bottom left;
   }
   .lightsaber.visible {
-    transform: translateY(0) translateX(0) scale(0.75);
+    transform: translateY(0) scale(0.65);
   }
-  .lightsaber-blade-wrap { height: 120px; }
 }
 
 /* ===== SECTION SPACING ===== */
@@ -1451,11 +1481,13 @@ section {
 
 <!-- ===== LIGHTSABER PROGRESS ===== -->
 <div class="lightsaber" id="lightsaber">
-  <div class="lightsaber-pct" id="lightsaber-pct">0%</div>
+  <div class="lightsaber-hilt">
+    <span class="lightsaber-pct" id="lightsaber-pct">0%</span>
+  </div>
   <div class="lightsaber-blade-wrap">
     <div class="lightsaber-blade" id="lightsaber-blade"></div>
+    <canvas class="lightsaber-sparks" id="lightsaber-sparks"></canvas>
   </div>
-  <div class="lightsaber-hilt"></div>
 </div>
 
 <!-- ===== HERO ===== -->
@@ -2293,28 +2325,204 @@ function copyCode(btn) {
 const lightsaber = document.getElementById('lightsaber');
 const blade = document.getElementById('lightsaber-blade');
 const pctLabel = document.getElementById('lightsaber-pct');
+const sparksCanvas = document.getElementById('lightsaber-sparks');
+const sparksCtx = sparksCanvas.getContext('2d');
 
-let lsTicking = false;
-window.addEventListener('scroll', () => {
-  if (!lsTicking) {
-    requestAnimationFrame(() => {
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = Math.min(Math.round((scrollY / docHeight) * 100), 100);
+/* --- Canvas sizing --- */
+function resizeSparksCanvas() {
+  const wrap = sparksCanvas.parentElement;
+  sparksCanvas.width = wrap.offsetWidth;
+  sparksCanvas.height = wrap.offsetHeight;
+}
+resizeSparksCanvas();
+new ResizeObserver(resizeSparksCanvas).observe(sparksCanvas.parentElement);
 
-      if (pct > 3) {
-        lightsaber.classList.add('visible');
-      } else {
-        lightsaber.classList.remove('visible');
-      }
+/* --- Particle pool --- */
+const MAX_PARTICLES = 50;
+const SPARK_COLORS = ['#fff', '#c8e6c9', '#66bb6a', '#a5d6a7'];
+const particles = [];
 
-      blade.style.height = pct + '%';
-      pctLabel.textContent = pct + '%';
-      lsTicking = false;
-    });
-    lsTicking = true;
+function createParticle(tipX, tipY) {
+  const angle = (Math.random() * 120 + 30) * (Math.PI / 180); // 30-150 deg upward
+  const speed = 50 + Math.random() * 150;
+  const isStreak = Math.random() > 0.7;
+  const p = {
+    x: tipX,
+    y: tipY,
+    vx: Math.cos(angle) * speed * (0.5 + Math.random()),
+    vy: -Math.sin(angle) * speed,
+    gravity: 30 + Math.random() * 20,
+    size: 1 + Math.random() * 3,
+    isStreak: isStreak,
+    color: Math.random() < 0.15 ? '#fff' : SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)],
+    lifetime: 0.3 + Math.random() * 0.5,
+    age: 0,
+    alpha: 0.8 + Math.random() * 0.2,
+    trail: []
+  };
+  if (particles.length >= MAX_PARTICLES) {
+    // recycle oldest
+    let oldest = 0;
+    for (let i = 1; i < particles.length; i++) {
+      if (particles[i].age > particles[oldest].age) oldest = i;
+    }
+    particles[oldest] = p;
+  } else {
+    particles.push(p);
   }
+}
+
+function updateParticles(dt) {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    // store trail position
+    p.trail.push({ x: p.x, y: p.y, alpha: p.alpha * 0.5 });
+    if (p.trail.length > 3) p.trail.shift();
+
+    p.vx *= 0.99;
+    p.vy += p.gravity * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.age += dt;
+
+    // fade over last 30% of life
+    const lifeRatio = p.age / p.lifetime;
+    if (lifeRatio > 0.7) {
+      p.alpha = (1 - (lifeRatio - 0.7) / 0.3) * 0.9;
+    }
+
+    if (p.age >= p.lifetime) {
+      particles.splice(i, 1);
+    }
+  }
+}
+
+function renderParticles(ctx) {
+  ctx.clearRect(0, 0, sparksCanvas.width, sparksCanvas.height);
+  for (const p of particles) {
+    // draw trails
+    for (const t of p.trail) {
+      ctx.globalAlpha = Math.max(0, t.alpha * 0.3);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(t.x, t.y, p.size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // draw particle
+    ctx.globalAlpha = Math.max(0, p.alpha);
+    ctx.fillStyle = p.color;
+    if (p.isStreak) {
+      ctx.save();
+      const angle = Math.atan2(p.vy, p.vx);
+      ctx.translate(p.x, p.y);
+      ctx.rotate(angle);
+      ctx.fillRect(-p.size, -p.size * 0.4, p.size * 2, p.size * 0.8);
+      ctx.restore();
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // glow
+    ctx.globalAlpha = Math.max(0, p.alpha * 0.3);
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* --- Scroll tracking with velocity --- */
+let lastScrollY = window.scrollY;
+let lastScrollTime = performance.now();
+let scrollVelocity = 0;
+let isScrolling = false;
+let scrollTimeout = null;
+let emissionDecay = 0;
+
+window.addEventListener('scroll', () => {
+  const now = performance.now();
+  const dt = (now - lastScrollTime) / 1000;
+  if (dt > 0) {
+    scrollVelocity = Math.abs(window.scrollY - lastScrollY) / dt;
+  }
+  lastScrollY = window.scrollY;
+  lastScrollTime = now;
+  isScrolling = true;
+
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+    emissionDecay = 0.5; // taper over 0.5s
+  }, 50);
+
+  // update blade position
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = Math.min(Math.round((window.scrollY / docHeight) * 100), 100);
+
+  if (pct > 3) {
+    lightsaber.classList.add('visible');
+  } else {
+    lightsaber.classList.remove('visible');
+  }
+
+  blade.style.width = pct + '%';
+  pctLabel.textContent = pct + '%';
+
+  // ensure animation loop is running
+  if (!animLoopRunning) startAnimLoop();
 }, { passive: true });
+
+/* --- Animation loop --- */
+let animLoopRunning = false;
+let lastFrameTime = 0;
+
+function startAnimLoop() {
+  animLoopRunning = true;
+  lastFrameTime = performance.now();
+  requestAnimationFrame(animFrame);
+}
+
+function animFrame(now) {
+  const dt = Math.min((now - lastFrameTime) / 1000, 0.05); // cap at 50ms
+  lastFrameTime = now;
+
+  // emit sparks
+  if (isScrolling || emissionDecay > 0) {
+    const bladeRect = blade.getBoundingClientRect();
+    const canvasRect = sparksCanvas.getBoundingClientRect();
+    const tipX = bladeRect.right - canvasRect.left;
+    const tipY = bladeRect.top + bladeRect.height / 2 - canvasRect.top;
+
+    // scale emission by velocity (3-6 particles per frame)
+    let emitCount;
+    if (isScrolling) {
+      const velocityFactor = Math.min(scrollVelocity / 2000, 1);
+      emitCount = Math.floor(3 + velocityFactor * 3);
+    } else {
+      emitCount = Math.max(1, Math.floor(emissionDecay * 4));
+      emissionDecay -= dt;
+    }
+
+    if (blade.style.width !== '0%') {
+      for (let i = 0; i < emitCount; i++) {
+        createParticle(tipX, tipY);
+      }
+    }
+  }
+
+  updateParticles(dt);
+  renderParticles(sparksCtx);
+
+  if (particles.length > 0 || isScrolling || emissionDecay > 0) {
+    requestAnimationFrame(animFrame);
+  } else {
+    animLoopRunning = false;
+  }
+}
 
 /* ===== PARALLAX ===== */
 const parallaxEls = document.querySelectorAll('[data-parallax]');
