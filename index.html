@@ -210,36 +210,210 @@ p { color: var(--text-muted); line-height: 1.7; }
   clip-path: inset(0 0 0 0);
 }
 
-/* ===== PROGRESS NAV ===== */
-.progress-nav {
-  position: fixed;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 100;
+/* ===== COPYABLE CODE BLOCKS ===== */
+.code-block {
+  position: relative;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 14px 48px 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--text);
+  overflow-x: auto;
+  margin: 8px 0;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
-.progress-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+.code-block code {
+  user-select: all;
+  -webkit-user-select: all;
+}
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.4s var(--ease-out-expo);
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
   padding: 0;
 }
-.progress-dot:hover {
-  background: rgba(255,255,255,0.4);
-  transform: scale(1.3);
+.copy-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: var(--text);
 }
-.progress-dot.active {
-  width: 10px;
-  height: 10px;
+.copy-btn.copied {
+  color: #34d399;
+  border-color: rgba(52,211,153,0.3);
+  background: rgba(52,211,153,0.1);
+}
+.copy-btn svg { width: 16px; height: 16px; }
+
+/* Sub-step numbering */
+.sub-steps {
+  counter-reset: substep;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sub-step {
+  counter-increment: substep;
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.sub-step:last-child { border-bottom: none; }
+.sub-step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.25);
+  color: var(--purple);
+  font-weight: 700;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.sub-step-content { flex: 1; min-width: 0; }
+.sub-step-content h4 {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.sub-step-content p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* ===== LIGHTSABER PROGRESS ===== */
+.lightsaber {
+  position: fixed;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-70px);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.6s var(--ease-out-back);
+  pointer-events: none;
+}
+.lightsaber.visible {
+  transform: translateY(-50%) translateX(0);
+}
+.lightsaber-pct {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
   background: var(--gradient-text);
-  box-shadow: 0 0 12px rgba(124,58,237,0.5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+.lightsaber-blade-wrap {
+  width: 6px;
+  height: 180px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.lightsaber-blade {
+  width: 100%;
+  height: 0%;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, rgba(0,200,255,0.6) 0%, rgba(124,58,237,0.9) 60%, rgba(255,255,255,1) 100%);
+  box-shadow:
+    0 0 8px rgba(0,200,255,0.6),
+    0 0 20px rgba(124,58,237,0.3),
+    0 0 40px rgba(0,200,255,0.15);
+  transition: height 0.15s ease-out;
+  position: relative;
+}
+.lightsaber-blade::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(0,200,255,0.2) 0%, rgba(124,58,237,0.15) 100%);
+  filter: blur(4px);
+  z-index: -1;
+}
+.lightsaber-hilt {
+  width: 14px;
+  height: 52px;
+  border-radius: 2px 2px 4px 4px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      #8a8a9a 0px,
+      #6b6b7b 2px,
+      #9a9aaa 3px,
+      #7a7a8a 5px
+    );
+  box-shadow:
+    inset 0 0 4px rgba(255,255,255,0.15),
+    0 2px 8px rgba(0,0,0,0.5);
+  position: relative;
+  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.lightsaber-hilt::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -2px;
+  right: -2px;
+  height: 6px;
+  background: linear-gradient(180deg, #aaa, #666);
+  border-radius: 2px 2px 0 0;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.lightsaber-hilt::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 1px;
+  right: 1px;
+  height: 8px;
+  background: linear-gradient(180deg, rgba(124,58,237,0.5), rgba(0,200,255,0.4));
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(124,58,237,0.4);
+}
+
+@media (max-width: 768px) {
+  .lightsaber {
+    left: 10px;
+    top: auto;
+    bottom: 20px;
+    transform: translateY(0) translateX(-60px) scale(0.75);
+  }
+  .lightsaber.visible {
+    transform: translateY(0) translateX(0) scale(0.75);
+  }
+  .lightsaber-blade-wrap { height: 120px; }
 }
 
 /* ===== SECTION SPACING ===== */
@@ -1244,7 +1418,6 @@ section {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .progress-nav { display: none; }
   section { padding: 80px 0; }
   .step-layout {
     grid-template-columns: 1fr;
@@ -1275,19 +1448,14 @@ section {
 </head>
 <body>
 
-<!-- ===== PROGRESS NAV ===== -->
-<nav class="progress-nav" aria-label="Section navigation">
-  <button class="progress-dot active" data-target="hero" aria-label="Hero"></button>
-  <button class="progress-dot" data-target="architecture" aria-label="Architecture"></button>
-  <button class="progress-dot" data-target="loop" aria-label="Dev Loop"></button>
-  <button class="progress-dot" data-target="step1" aria-label="Step 1"></button>
-  <button class="progress-dot" data-target="step2" aria-label="Step 2"></button>
-  <button class="progress-dot" data-target="step3" aria-label="Step 3"></button>
-  <button class="progress-dot" data-target="step4" aria-label="Step 4"></button>
-  <button class="progress-dot" data-target="step5" aria-label="Step 5"></button>
-  <button class="progress-dot" data-target="cashflow" aria-label="CashFlow Pro"></button>
-  <button class="progress-dot" data-target="stuck" aria-label="If You Get Stuck"></button>
-</nav>
+<!-- ===== LIGHTSABER PROGRESS ===== -->
+<div class="lightsaber" id="lightsaber">
+  <div class="lightsaber-pct" id="lightsaber-pct">0%</div>
+  <div class="lightsaber-blade-wrap">
+    <div class="lightsaber-blade" id="lightsaber-blade"></div>
+  </div>
+  <div class="lightsaber-hilt"></div>
+</div>
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="hero">
@@ -1328,7 +1496,6 @@ section {
     <div class="eyebrow">Your Agentic Builder Playbook</div>
     <h1>Hey Jasper,<br>Let's Build Your <span class="gradient-text">Financial App</span></h1>
     <p>Everything you need to set up an AI-powered development workflow — from zero to shipping your first product.</p>
-    <a href="#architecture" class="cta-btn" data-magnetic>Let's Go →</a>
   </div>
 
   <div class="scroll-hint">
@@ -1533,55 +1700,93 @@ section {
 <!-- ===== STEP 3: DEV TOOLS ===== -->
 <section class="step-section" id="step3">
   <div class="container">
-    <!-- First: How to open Terminal -->
-    <div style="text-align:center;max-width:650px;margin:0 auto 60px;">
+    <div style="text-align:center;max-width:650px;margin:0 auto 48px;">
       <div class="step-number" data-anim="scale-up" style="margin:0 auto 20px;">3</div>
       <h2 data-anim="fade-up" data-delay="100">Install <span class="gradient-text">Developer Tools</span></h2>
-      <p data-anim="fade-up" data-delay="200">First, open Terminal on your Mac. Press <span class="kbd">⌘</span> + <span class="kbd">Space</span> to open Spotlight, then type "Terminal".</p>
+      <p data-anim="fade-up" data-delay="200">Open your Mac's Terminal and install Homebrew + Git. Follow each sub-step.</p>
     </div>
 
-    <!-- Spotlight mockup -->
-    <div data-anim="scale-up" data-delay="300" style="max-width:460px;margin:0 auto 20px;">
-      <div class="spotlight-mockup">
-        <div class="spotlight-search">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M12 12l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          <span>Terminal</span>
-        </div>
-        <div class="spotlight-result">
-          <div class="spotlight-result-icon">🖥️</div>
-          <div>
-            <div class="spotlight-result-text">Terminal</div>
-            <div class="spotlight-result-sub">Application — /System/Applications/Utilities</div>
+    <div style="max-width:700px;margin:0 auto;" data-anim="fade-up" data-delay="300">
+      <ol class="sub-steps">
+        <!-- Sub-step A: Open Spotlight -->
+        <li class="sub-step">
+          <div class="sub-step-num">A</div>
+          <div class="sub-step-content">
+            <h4>Open Spotlight Search</h4>
+            <p>Press <span class="kbd">⌘</span> + <span class="kbd">Space</span> on your keyboard. This opens the Mac Spotlight search bar.</p>
           </div>
-        </div>
-      </div>
-      <div class="callout-arrow" style="max-width:460px;margin:8px auto 0;">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0-10l3 3m-3-3L5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Hit Enter to open Terminal
-      </div>
-    </div>
+        </li>
 
-    <!-- Then: Terminal commands -->
-    <div style="margin-top:48px;">
-      <p data-anim="fade-up" style="text-align:center;max-width:600px;margin:0 auto 24px;">Now paste these commands one at a time to install <strong style="color:var(--text)">Homebrew</strong> (a Mac package manager) and <strong style="color:var(--text)">Git</strong> (version control).</p>
-      <div style="max-width:680px;margin:0 auto;">
+        <!-- Sub-step B: Find Terminal -->
+        <li class="sub-step">
+          <div class="sub-step-num">B</div>
+          <div class="sub-step-content">
+            <h4>Type "Terminal" and hit Enter</h4>
+            <p>This is what you'll see:</p>
+            <div style="max-width:420px;margin:8px 0;" data-anim="scale-up" data-delay="100">
+              <div class="spotlight-mockup">
+                <div class="spotlight-search">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M12 12l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span>Terminal</span>
+                </div>
+                <div class="spotlight-result">
+                  <div class="spotlight-result-icon">🖥️</div>
+                  <div>
+                    <div class="spotlight-result-text">Terminal</div>
+                    <div class="spotlight-result-sub">Application — /System/Applications/Utilities</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Sub-step C: Install Homebrew -->
+        <li class="sub-step">
+          <div class="sub-step-num">C</div>
+          <div class="sub-step-content">
+            <h4>Install Homebrew</h4>
+            <p>Paste this command into Terminal and hit Enter. It installs Homebrew, a Mac package manager.</p>
+            <div class="code-block">
+              <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code>
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy to clipboard">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;">⏱ This may take a few minutes. Follow the prompts if asked for your password.</p>
+          </div>
+        </li>
+
+        <!-- Sub-step D: Install Git -->
+        <li class="sub-step">
+          <div class="sub-step-num">D</div>
+          <div class="sub-step-content">
+            <h4>Install Git &amp; verify</h4>
+            <p>Once Homebrew is done, run this to install Git and confirm it works:</p>
+            <div class="code-block">
+              <code>brew install git && git --version</code>
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy to clipboard">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <!-- What you'll see -->
+      <div style="margin-top:32px;">
+        <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">Here's what a successful install looks like:</p>
         <div class="terminal" data-anim="clip-reveal-up" data-delay="200" data-terminal>
           <div class="terminal-bar">
             <span class="terminal-dot red"></span>
             <span class="terminal-dot yellow"></span>
             <span class="terminal-dot green"></span>
-            <span class="terminal-title">Terminal — zsh — 80×24</span>
+            <span class="terminal-title">Terminal — zsh</span>
           </div>
           <div class="terminal-body">
-            <div class="terminal-line" data-type="command"><span class="prompt">~ $ </span><span class="command">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span></div>
-            <div class="terminal-line"><span class="success">==&gt; Installation successful!</span></div>
-            <div class="terminal-line"><span class="muted">==&gt; Next steps: Run brew help to get started</span></div>
-            <div class="terminal-line">&nbsp;</div>
-            <div class="terminal-line" data-type="command"><span class="prompt">~ $ </span><span class="command">brew install git</span></div>
+            <div class="terminal-line" data-type="command"><span class="prompt">~ $ </span><span class="command">brew install git && git --version</span></div>
             <div class="terminal-line"><span class="muted">==&gt; Downloading https://ghcr.io/homebrew/core/git</span></div>
             <div class="terminal-line"><span class="success">✓ git 2.44.0 installed successfully</span></div>
-            <div class="terminal-line">&nbsp;</div>
-            <div class="terminal-line" data-type="command"><span class="prompt">~ $ </span><span class="command">git --version</span></div>
             <div class="terminal-line"><span class="muted">git version 2.44.0</span></div>
           </div>
         </div>
@@ -1593,113 +1798,100 @@ section {
 <!-- ===== STEP 4: CLAUDE CODE ===== -->
 <section class="step-section" id="step4">
   <div class="container">
-    <div style="text-align:center;max-width:650px;margin:0 auto 40px;">
+    <div style="text-align:center;max-width:650px;margin:0 auto 48px;">
       <div class="step-number" data-anim="scale-up" style="margin:0 auto 20px;">4</div>
       <h2 data-anim="fade-up" data-delay="100">Install <span class="gradient-text">Claude Code</span></h2>
-      <p data-anim="fade-up" data-delay="200">In VS Code, press <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">X</span> to open the Extensions panel. Search for "Claude Code" and click <strong style="color:var(--text)">Install</strong>.</p>
+      <p data-anim="fade-up" data-delay="200">Add the Claude Code extension to VS Code, then verify it works.</p>
     </div>
 
-    <!-- VS Code Extensions mockup -->
-    <div data-anim="scale-up" data-delay="300" style="max-width:860px;margin:0 auto;">
-      <div class="vscode-mockup">
-        <div class="mac-titlebar">
-          <div class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
-          <div class="title">Visual Studio Code</div>
-          <div style="width:36px;"></div>
-        </div>
-        <div class="vscode-sidebar">
-          <!-- Activity Bar -->
-          <div class="vscode-activity-bar">
-            <div class="vscode-activity-icon" title="Explorer">
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 4h7v2H5v12h12v-5h2v7H3V4z" fill="currentColor" opacity="0.6"/><path d="M9 2h10v10H9V2zm2 2v6h6V4h-6z" fill="currentColor" opacity="0.6"/></svg>
-            </div>
-            <div class="vscode-activity-icon" title="Search">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </div>
-            <div class="vscode-activity-icon" title="Source Control">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="14" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="6" cy="14" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 8v4M12 6H8" stroke="currentColor" stroke-width="1.3"/></svg>
-            </div>
-            <div class="vscode-activity-icon active" title="Extensions">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="14" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
-            </div>
+    <div style="max-width:700px;margin:0 auto;" data-anim="fade-up" data-delay="300">
+      <ol class="sub-steps">
+        <!-- Sub-step A: Open Extensions -->
+        <li class="sub-step">
+          <div class="sub-step-num">A</div>
+          <div class="sub-step-content">
+            <h4>Open VS Code Extensions</h4>
+            <p>Launch VS Code, then press <span class="kbd">⌘</span> + <span class="kbd">Shift</span> + <span class="kbd">X</span> to open the Extensions sidebar.</p>
           </div>
-          <!-- Extensions Panel -->
-          <div class="vscode-panel">
-            <div class="vscode-panel-header">Extensions</div>
-            <div class="vscode-search-box">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M9.5 9.5l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-              <span style="color:var(--text);">Claude Code</span>
-            </div>
-            <!-- Claude Code result (selected) -->
-            <div class="vscode-ext-item selected">
-              <div class="vscode-ext-icon" style="background:linear-gradient(135deg,#D97757,#c4623f);">
-                <svg viewBox="0 0 100 100" width="28" height="28" fill="none"><circle cx="50" cy="50" r="32" fill="#1a1a2e" opacity="0.6"/><path d="M38 50a12 12 0 1124 0 12 12 0 01-24 0z" fill="#1a1a2e"/></svg>
-              </div>
-              <div class="vscode-ext-info">
-                <div class="vscode-ext-name">Claude Code</div>
-                <div class="vscode-ext-pub">Anthropic</div>
-                <div class="vscode-ext-desc">AI coding assistant powered by Claude</div>
-                <div class="vscode-ext-stars">★★★★★ 4.9</div>
-              </div>
-            </div>
-            <!-- Other results -->
-            <div class="vscode-ext-item" style="opacity:0.5;">
-              <div class="vscode-ext-icon" style="background:#2d2d44;">
-                <span style="font-size:16px;">🔧</span>
-              </div>
-              <div class="vscode-ext-info">
-                <div class="vscode-ext-name" style="color:var(--text-muted);">Claude Themes</div>
-                <div class="vscode-ext-pub">Community</div>
-              </div>
-            </div>
-          </div>
-          <!-- Main detail pane -->
-          <div class="vscode-main">
-            <div class="vscode-ext-detail">
-              <div class="vscode-ext-detail-header">
-                <div class="vscode-ext-detail-icon" style="background:linear-gradient(135deg,#D97757,#c4623f);">
-                  <svg viewBox="0 0 100 100" width="40" height="40" fill="none"><circle cx="50" cy="50" r="32" fill="#1a1a2e" opacity="0.6"/><path d="M38 50a12 12 0 1124 0 12 12 0 01-24 0z" fill="#1a1a2e"/></svg>
+        </li>
+
+        <!-- Sub-step B: Search & Install -->
+        <li class="sub-step">
+          <div class="sub-step-num">B</div>
+          <div class="sub-step-content">
+            <h4>Search "Claude Code" and click Install</h4>
+            <p>Type "Claude Code" in the search bar. Click the blue <strong style="color:#0078d4;">Install</strong> button on the one by <strong style="color:var(--text);">Anthropic</strong>.</p>
+            <!-- VS Code Extensions mockup -->
+            <div data-anim="scale-up" data-delay="100" style="margin:12px 0;">
+              <div class="vscode-mockup">
+                <div class="mac-titlebar">
+                  <div class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                  <div class="title">Visual Studio Code</div>
+                  <div style="width:36px;"></div>
                 </div>
-                <div>
-                  <div class="vscode-ext-detail-title">Claude Code</div>
-                  <div class="vscode-ext-detail-pub">Anthropic</div>
-                  <div class="vscode-ext-detail-desc">Agentic coding assistant. Generate code, run commands, and build software with Claude directly in VS Code.</div>
-                  <button class="vscode-install-btn">Install</button>
-                  <div>
-                    <span class="vscode-badge">📥 2.1M installs</span>
-                    <span class="vscode-badge">★ 4.9</span>
+                <div class="vscode-sidebar">
+                  <div class="vscode-activity-bar">
+                    <div class="vscode-activity-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 4h7v2H5v12h12v-5h2v7H3V4z" fill="currentColor" opacity="0.6"/><path d="M9 2h10v10H9V2zm2 2v6h6V4h-6z" fill="currentColor" opacity="0.6"/></svg></div>
+                    <div class="vscode-activity-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                    <div class="vscode-activity-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="14" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="6" cy="14" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 8v4M12 6H8" stroke="currentColor" stroke-width="1.3"/></svg></div>
+                    <div class="vscode-activity-icon active"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="14" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg></div>
+                  </div>
+                  <div class="vscode-panel">
+                    <div class="vscode-panel-header">Extensions</div>
+                    <div class="vscode-search-box">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M9.5 9.5l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                      <span style="color:var(--text);">Claude Code</span>
+                    </div>
+                    <div class="vscode-ext-item selected">
+                      <div class="vscode-ext-icon" style="background:linear-gradient(135deg,#D97757,#c4623f);"><svg viewBox="0 0 100 100" width="28" height="28" fill="none"><circle cx="50" cy="50" r="32" fill="#1a1a2e" opacity="0.6"/></svg></div>
+                      <div class="vscode-ext-info">
+                        <div class="vscode-ext-name">Claude Code</div>
+                        <div class="vscode-ext-pub">Anthropic</div>
+                        <div class="vscode-ext-desc">AI coding assistant powered by Claude</div>
+                        <div class="vscode-ext-stars">★★★★★ 4.9</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="vscode-main">
+                    <div class="vscode-ext-detail">
+                      <div class="vscode-ext-detail-header">
+                        <div class="vscode-ext-detail-icon" style="background:linear-gradient(135deg,#D97757,#c4623f);"><svg viewBox="0 0 100 100" width="40" height="40" fill="none"><circle cx="50" cy="50" r="32" fill="#1a1a2e" opacity="0.6"/></svg></div>
+                        <div>
+                          <div class="vscode-ext-detail-title">Claude Code</div>
+                          <div class="vscode-ext-detail-pub">Anthropic</div>
+                          <div class="vscode-ext-detail-desc">Agentic coding assistant. Generate code, run commands, and build software with Claude directly in VS Code.</div>
+                          <button class="vscode-install-btn">Install</button>
+                          <div><span class="vscode-badge">📥 2.1M installs</span><span class="vscode-badge">★ 4.9</span></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="callout-arrow" style="max-width:460px;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0-10l3 3m-3-3L5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Click the blue Install button, then sign in with your Claude account
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="callout-arrow" data-anim="fade-up" data-delay="400" style="max-width:460px;margin:16px auto 0;">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0-10l3 3m-3-3L5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Click the blue Install button, then sign in to your Claude account
-    </div>
+        </li>
 
-    <!-- Verification terminal -->
-    <div style="margin-top:40px;">
-      <p data-anim="fade-up" style="text-align:center;max-width:500px;margin:0 auto 16px;">After installing, verify it works in your terminal:</p>
-      <div style="max-width:500px;margin:0 auto;">
-        <div class="terminal" data-anim="fade-up" data-delay="100" data-terminal>
-          <div class="terminal-bar">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-            <span class="terminal-title">Terminal — zsh</span>
+        <!-- Sub-step C: Verify -->
+        <li class="sub-step">
+          <div class="sub-step-num">C</div>
+          <div class="sub-step-content">
+            <h4>Verify installation</h4>
+            <p>Open Terminal and run this to confirm Claude Code is working:</p>
+            <div class="code-block">
+              <code>claude --version</code>
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy to clipboard">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <p style="font-size:0.78rem;">You should see something like: <span style="color:#a6e3a1;font-family:var(--font-mono);">claude-code v1.0.33</span></p>
           </div>
-          <div class="terminal-body">
-            <div class="terminal-line" data-type="command"><span class="prompt">~ $ </span><span class="command">claude --version</span></div>
-            <div class="terminal-line"><span class="muted">claude-code v1.0.33 (Claude Code)</span></div>
-            <div class="terminal-line">&nbsp;</div>
-            <div class="terminal-line"><span class="success">✓ Claude Code is ready!</span></div>
-          </div>
-        </div>
-      </div>
+        </li>
+      </ol>
     </div>
   </div>
 </section>
@@ -1707,78 +1899,88 @@ section {
 <!-- ===== STEP 5: SUPERPOWERS ===== -->
 <section class="step-section" id="step5">
   <div class="container">
-    <div style="text-align:center;max-width:650px;margin:0 auto 40px;">
+    <div style="text-align:center;max-width:650px;margin:0 auto 48px;">
       <div class="step-number" data-anim="scale-up" style="margin:0 auto 20px;">5</div>
       <h2 data-anim="fade-up" data-delay="100">Install <span class="gradient-text">Superpowers</span></h2>
-      <p data-anim="fade-up" data-delay="200">This plugin gives Claude advanced skills — brainstorming, planning, test-driven development, and more. It's how you'll design CashFlow Pro before writing a line of code.</p>
+      <p data-anim="fade-up" data-delay="200">This plugin gives Claude advanced skills — brainstorming, planning, TDD, and more. It's how you'll design CashFlow Pro before writing a line of code.</p>
     </div>
 
-    <!-- Claude Code panel mockup showing where to type -->
-    <div data-anim="scale-up" data-delay="300" style="max-width:680px;margin:0 auto;">
-      <div class="claude-panel-mockup">
-        <div class="mac-titlebar">
-          <div class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
-          <div class="title">Claude Code — VS Code</div>
-          <div style="width:36px;"></div>
-        </div>
-        <div class="claude-panel-header">
-          <div class="claude-panel-tab active">Claude Code</div>
-          <div class="claude-panel-tab">Terminal</div>
-          <div class="claude-panel-tab">Output</div>
-        </div>
-        <div class="claude-panel-body">
-          <!-- Conversation area -->
-          <div style="margin-bottom:16px;">
-            <div style="display:flex;gap:10px;margin-bottom:16px;">
-              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#D97757,#c4623f);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
-                <span style="font-size:12px;color:white;font-weight:700;">C</span>
-              </div>
-              <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 16px;flex:1;">
-                <p style="font-size:0.82rem;color:var(--text);margin:0;line-height:1.6;">Welcome, Jasper! I'm Claude, your AI coding assistant. Type a message below or use a slash command to get started.</p>
-              </div>
-            </div>
+    <div style="max-width:700px;margin:0 auto;" data-anim="fade-up" data-delay="300">
+      <ol class="sub-steps">
+        <!-- Sub-step A: Open Claude Code -->
+        <li class="sub-step">
+          <div class="sub-step-num">A</div>
+          <div class="sub-step-content">
+            <h4>Open the Claude Code panel in VS Code</h4>
+            <p>You should see it in the bottom panel or sidebar after installing the extension.</p>
           </div>
+        </li>
 
-          <!-- Input area with typed command -->
-          <div class="claude-input-area" style="border-color:rgba(124,58,237,0.4);box-shadow:0 0 0 2px rgba(124,58,237,0.15);">
-            <div class="claude-input-text">
-              <span class="typed">claude install superpowers</span><span class="cursor-blink"></span>
+        <!-- Sub-step B: Type the command -->
+        <li class="sub-step">
+          <div class="sub-step-num">B</div>
+          <div class="sub-step-content">
+            <h4>Type the install command</h4>
+            <p>In the Claude Code chat input at the bottom, type this and hit Enter:</p>
+            <div class="code-block">
+              <code>claude install superpowers</code>
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy to clipboard">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
             </div>
-            <div class="claude-send-btn">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10m0 0L8 3m4 4L8 11" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p style="font-size:0.78rem;">Here's where you'll type it:</p>
+            <!-- Claude Code panel mockup -->
+            <div style="margin:12px 0;" data-anim="scale-up" data-delay="100">
+              <div class="claude-panel-mockup">
+                <div class="mac-titlebar">
+                  <div class="dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+                  <div class="title">Claude Code — VS Code</div>
+                  <div style="width:36px;"></div>
+                </div>
+                <div class="claude-panel-header">
+                  <div class="claude-panel-tab active">Claude Code</div>
+                  <div class="claude-panel-tab">Terminal</div>
+                  <div class="claude-panel-tab">Output</div>
+                </div>
+                <div class="claude-panel-body">
+                  <div style="margin-bottom:16px;">
+                    <div style="display:flex;gap:10px;margin-bottom:16px;">
+                      <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#D97757,#c4623f);flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:12px;color:white;font-weight:700;">C</span></div>
+                      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 16px;flex:1;">
+                        <p style="font-size:0.82rem;color:var(--text);margin:0;line-height:1.6;">Welcome, Jasper! I'm Claude, your AI coding assistant.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="claude-input-area" style="border-color:rgba(124,58,237,0.4);box-shadow:0 0 0 2px rgba(124,58,237,0.15);">
+                    <div class="claude-input-text"><span class="typed">claude install superpowers</span><span class="cursor-blink"></span></div>
+                    <div class="claude-send-btn"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10m0 0L8 3m4 4L8 11" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="callout-arrow" style="max-width:460px;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0-10l3 3m-3-3L5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Type in the chat input at the bottom, then hit Enter
             </div>
           </div>
-        </div>
-      </div>
-      <div class="callout-arrow" data-anim="fade-up" data-delay="400" style="max-width:540px;margin:12px auto 0;">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0-10l3 3m-3-3L5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Type this in the Claude Code chat input, then hit Enter
-      </div>
-    </div>
+        </li>
 
-    <!-- Result terminal -->
-    <div style="margin-top:36px;">
-      <p data-anim="fade-up" style="text-align:center;max-width:500px;margin:0 auto 16px;">Claude will install the plugin and confirm. Verify with:</p>
-      <div style="max-width:560px;margin:0 auto;">
-        <div class="terminal" data-anim="clip-reveal-up" data-delay="200" data-terminal>
-          <div class="terminal-bar">
-            <span class="terminal-dot red"></span>
-            <span class="terminal-dot yellow"></span>
-            <span class="terminal-dot green"></span>
-            <span class="terminal-title">Terminal — zsh</span>
+        <!-- Sub-step C: Verify -->
+        <li class="sub-step">
+          <div class="sub-step-num">C</div>
+          <div class="sub-step-content">
+            <h4>Verify skills are loaded</h4>
+            <p>Open Terminal and run:</p>
+            <div class="code-block">
+              <code>claude skills</code>
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy to clipboard">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <p style="font-size:0.78rem;">You should see skills like <span style="color:var(--pink);font-family:var(--font-mono);">brainstorming</span>, <span style="color:var(--pink);font-family:var(--font-mono);">writing-plans</span>, <span style="color:var(--pink);font-family:var(--font-mono);">frontend-design</span>, and more.</p>
           </div>
-          <div class="terminal-body">
-            <div class="terminal-line" data-type="command"><span class="prompt">~ $ </span><span class="command">claude skills</span></div>
-            <div class="terminal-line"><span class="muted">Available skills:</span></div>
-            <div class="terminal-line"><span class="highlight">  brainstorming</span><span class="muted"> — Explore ideas before building</span></div>
-            <div class="terminal-line"><span class="highlight">  writing-plans</span><span class="muted"> — Create implementation plans</span></div>
-            <div class="terminal-line"><span class="highlight">  test-driven-development</span><span class="muted"> — TDD workflow</span></div>
-            <div class="terminal-line"><span class="highlight">  frontend-design</span><span class="muted"> — Build beautiful UIs</span></div>
-            <div class="terminal-line">&nbsp;</div>
-            <div class="terminal-line"><span class="success">✓ Superpowers ready — 12 skills loaded</span></div>
-          </div>
-        </div>
-      </div>
+        </li>
+      </ol>
     </div>
   </div>
 </section>
@@ -2072,38 +2274,44 @@ const chartObserver = new IntersectionObserver((entries) => {
 const chartSvg = document.querySelector('.chart-svg');
 if (chartSvg) chartObserver.observe(chartSvg);
 
-/* ===== PROGRESS NAV ===== */
-const sections = document.querySelectorAll('section[id]');
-const dots = document.querySelectorAll('.progress-dot');
-
-function updateProgressNav() {
-  let current = '';
-  sections.forEach(section => {
-    const rect = section.getBoundingClientRect();
-    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-      current = section.id;
-    }
-  });
-  dots.forEach(dot => {
-    dot.classList.toggle('active', dot.dataset.target === current);
+/* ===== COPY CODE ===== */
+function copyCode(btn) {
+  const block = btn.closest('.code-block');
+  const code = block.querySelector('code').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none"><path d="M3.5 9l3 3L12.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 11V3a1.5 1.5 0 011.5-1.5H11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+    }, 2000);
   });
 }
 
-dots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    const target = document.getElementById(dot.dataset.target);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
-  });
-});
+/* ===== LIGHTSABER PROGRESS ===== */
+const lightsaber = document.getElementById('lightsaber');
+const blade = document.getElementById('lightsaber-blade');
+const pctLabel = document.getElementById('lightsaber-pct');
 
-let ticking = false;
+let lsTicking = false;
 window.addEventListener('scroll', () => {
-  if (!ticking) {
+  if (!lsTicking) {
     requestAnimationFrame(() => {
-      updateProgressNav();
-      ticking = false;
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = Math.min(Math.round((scrollY / docHeight) * 100), 100);
+
+      if (pct > 3) {
+        lightsaber.classList.add('visible');
+      } else {
+        lightsaber.classList.remove('visible');
+      }
+
+      blade.style.height = pct + '%';
+      pctLabel.textContent = pct + '%';
+      lsTicking = false;
     });
-    ticking = true;
+    lsTicking = true;
   }
 }, { passive: true });
 
@@ -2143,7 +2351,6 @@ if (window.matchMedia('(pointer: fine)').matches) {
 }
 
 /* ===== INITIAL STATE ===== */
-updateProgressNav();
 </script>
 
 </body>
