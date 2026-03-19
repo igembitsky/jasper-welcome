@@ -2685,8 +2685,11 @@ function animFrame(now) {
   if (isScrolling || emissionDecay > 0) {
     const bladeRect = blade.getBoundingClientRect();
     const canvasRect = sparksCanvas.getBoundingClientRect();
-    const tipX = bladeRect.right - canvasRect.left;
-    const tipY = bladeRect.top + bladeRect.height / 2 - canvasRect.top;
+    // On mobile the container is CSS-scaled; getBoundingClientRect returns
+    // scaled values but canvas coords are unscaled, so compensate.
+    const scale = canvasRect.width / sparksCanvas.width || 1;
+    const tipX = (bladeRect.right - canvasRect.left) / scale;
+    const tipY = (bladeRect.top + bladeRect.height / 2 - canvasRect.top) / scale;
 
     // scale emission by velocity (3-6 particles per frame)
     let emitCount;
